@@ -9,7 +9,18 @@ import Gallery from './Gallery';
 import About from './About';
 import Header from './Header';
 import Footer from './Footer';
+import useFadeInOnScroll from './hooks/useFadeInOnScroll'; // Import the hook
 import './App.css';
+
+// Wrapper component for fade-in animation
+const AnimatedSection: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { elementRef, isVisible } = useFadeInOnScroll();
+  return (
+    <div ref={elementRef} className={`fade-in-section ${isVisible ? 'is-visible' : ''}`}>
+      {children}
+    </div>
+  );
+};
 
 function App() {
   return (
@@ -18,11 +29,11 @@ function App() {
         <Header />
         <main>
           <Routes>
-            <Route path="/" element={<Landing />} />
+            <Route path="/" element={<AnimatedSection><Landing /></AnimatedSection>} />
             <Route path="/login" element={<Login />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<AnimatedSection><Projects /></AnimatedSection>} />
+            <Route path="/gallery" element={<AnimatedSection><Gallery /></AnimatedSection>} />
+            <Route path="/about" element={<AnimatedSection><About /></AnimatedSection>} />
             
             <Route
               path="/dashboard"
