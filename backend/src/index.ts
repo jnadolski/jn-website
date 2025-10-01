@@ -26,7 +26,9 @@ const port = process.env.PORT || 3001;
 app.use(express.json());
 
 // Middleware for CORS
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || 'http://localhost:3000'
+}));
 
 app.get('/', (req, res) => {
   res.send('Hello from the jennyOS backend!');
