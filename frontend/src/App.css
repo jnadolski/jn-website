@@ -3,6 +3,7 @@
 /* Define color variables for light mode (default) */
 :root {
   --background: #F9F9F9;
+  --background-rgb: 249, 249, 249;
   --text: #333333;
   --primary-accent: #8A9A5B;
   --secondary-accent: #D98C60;
@@ -15,6 +16,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #1C1C1E;
+    --background-rgb: 28, 28, 30;
     --text: #EAEAEA;
     --primary-accent: #8A9A5B;
     --secondary-accent: #D98C60;
@@ -72,6 +74,13 @@ a:hover {
 
 /* Header Styles */
 .site-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: rgba(var(--background-rgb), 0.8); /* Semi-transparent background */
+  backdrop-filter: blur(10px); /* Glassmorphism effect */
+  -webkit-backdrop-filter: blur(10px); /* For Safari support */
   display: flex;
   justify-content: space-between;
   align-items: center;
