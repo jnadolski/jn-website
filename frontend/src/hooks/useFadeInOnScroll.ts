@@ -18,8 +18,9 @@ const useFadeInOnScroll = (options?: IntersectionObserverInit) => {
     }
 
     return () => {
-      if (elementRef.current) {
-        observer.unobserve(elementRef.current);
+      const currentElement = elementRef.current;
+      if (currentElement) {
+        observer.unobserve(currentElement);
       }
     };
   }, [elementRef, options, hasAnimated]);
