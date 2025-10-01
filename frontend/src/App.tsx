@@ -53,30 +53,28 @@ function App() {
   }, [location]);
 
   return (
-    <Router>
-      <div className="App">
-        <Header />
-        <main>
-          <Routes>
-            <Route path="/" element={<AnimatedSection><Landing /></AnimatedSection>} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/projects" element={<AnimatedSection><Projects /></AnimatedSection>} />
-            <Route path="/gallery" element={<AnimatedSection><Gallery /></AnimatedSection>} />
-            <Route path="/about" element={<AnimatedSection><About /></AnimatedSection>} />
-            
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <div className="App">
+      <Header />
+      <main>
+        <Routes>
+          <Route path="/" element={<AnimatedSection><Landing /></AnimatedSection>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/projects" element={<AnimatedSection><Projects /></AnimatedSection>} />
+          <Route path="/gallery" element={<AnimatedSection><Gallery /></AnimatedSection>} />
+          <Route path="/about" element={<AnimatedSection><About /></AnimatedSection>} />
+          
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
   );
 }
 
