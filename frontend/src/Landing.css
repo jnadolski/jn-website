@@ -50,7 +50,8 @@
 }
 
 .button.primary:hover {
-  background-color: darken(var(--primary-accent), 10%); /* Placeholder for actual darken function */
+  background-color: var(--primary-accent);
+  filter: brightness(0.8); /* Darken by 20% */
   color: #ffffff;
 }
 
