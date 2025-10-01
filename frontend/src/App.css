@@ -148,7 +148,7 @@ main {
 }
 
 /* Mobile Navigation Styles */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .site-header {
     padding: 1rem; /* Reduce horizontal padding on mobile */
   }
