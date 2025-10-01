@@ -1,0 +1,64 @@
+.landing-page {
+  text-align: center;
+  padding-top: 2rem; /* Adjust based on header height if needed */
+}
+
+.hero-section {
+  min-height: calc(100vh - 4rem); /* Full viewport height minus header height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: var(--background);
+  color: var(--text);
+}
+
+.hero-headline {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.hero-tagline {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  max-width: 800px;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.button {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.button.primary {
+  background-color: var(--primary-accent);
+  color: #ffffff;
+  border: 1px solid var(--primary-accent);
+}
+
+.button.primary:hover {
+  background-color: darken(var(--primary-accent), 10%); /* Placeholder for actual darken function */
+  color: #ffffff;
+}
+
+.button.secondary {
+  background-color: transparent;
+  color: var(--text);
+  border: 1px solid var(--text);
+}
+
+.button.secondary:hover {
+  background-color: var(--text);
+  color: var(--background);
+}
