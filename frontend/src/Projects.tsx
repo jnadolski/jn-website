@@ -14,9 +14,10 @@ const Projects = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log("API URL from environment:", process.env.REACT_APP_API_URL);
     const fetchProjects = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/projects');
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/projects`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
