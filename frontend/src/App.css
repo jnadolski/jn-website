@@ -137,6 +137,7 @@ main {
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s;
+  min-width: 0; /* Allow links to shrink */
 }
 
 .main-nav a:hover {
@@ -145,6 +146,7 @@ main {
 
 .main-nav .button.primary {
   margin-left: 0.5rem; /* Space between last link and button */
+  min-width: 0; /* Allow button to shrink */
 }
 
 /* Mobile Navigation Styles */
