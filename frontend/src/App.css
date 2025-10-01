@@ -1,0 +1,314 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* Define color variables for light mode (default) */
+:root {
+  --background: #F9F9F9;
+  --text: #333333;
+  --primary-accent: #8A9A5B;
+  --secondary-accent: #D98C60;
+  --border: #E5E5E7;
+  --font-family-body: 'Inter', sans-serif;
+  --font-family-heading: 'Inter', sans-serif;
+}
+
+/* Define color variables for dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1C1C1E;
+    --text: #EAEAEA;
+    --primary-accent: #8A9A5B;
+    --secondary-accent: #D98C60;
+    --border: #38383A;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background);
+  color: var(--text);
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-heading);
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+a {
+  color: var(--primary-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.App {
+  text-align: center;
+}
+
+/* Header Styles */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--text); /* Make the text next to the logo match the body text color */
+}
+
+.logo-link:hover {
+  text-decoration: none;
+}
+
+.chameleon-logo {
+  /* The fill is set to 'currentColor' in the SVG, so it inherits the color from its parent.
+     The parent .logo-link has its color set to var(--text), so the logo will match the text color. */
+}
+
+.site-header nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* Footer Styles */
+footer {
+  padding: 2rem;
+  margin-top: 4rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.contact-info, .social-links {
+  font-weight: bold;
+}
+
+.contact-info a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text);
+}
+
+.contact-info a:hover {
+  color: var(--primary-accent);
+  text-decoration: none;
+}
+
+.social-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.copyright {
+  width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 2rem;
+  color: var(--text);
+  opacity: 0.7;
+}
+
+/* Remove the default CRA styles */
+.App-logo { display: none; }
+.App-header { display: none; }
+.App-link { display: none; }
+
+/* Page Content Styles */
+.page-content {
+  padding: 0 2rem;
+}
+
+/* Projects Page Styles */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.project-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  background-color: var(--background);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex; /* Make it a flex container */
+  align-items: flex-start; /* Align items to the top */
+  gap: 1rem; /* Space between icon and content */
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.project-card h3 {
+  margin-top: 0;
+}
+
+.project-icon {
+  width: 64px; /* Adjust size as needed */
+  height: 64px;
+  flex-shrink: 0; /* Prevent icon from shrinking */
+  border-radius: 8px; /* Match card border-radius */
+  object-fit: cover;
+}
+
+.project-card-content {
+  flex-grow: 1; /* Allow content to take remaining space */
+  text-align: left;
+}
+
+.technologies {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tech-tag {
+  display: inline-block;
+  background-color: var(--border);
+  color: var(--text);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Gallery Page Styles */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.gallery-item {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden; /* This will make the image respect the border-radius */
+  position: relative;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This makes the images fill the container without stretching */
+  display: block;
+}
+
+.gallery-item .caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 0.5rem;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.gallery-item:hover .caption {
+  opacity: 1;
+}
+
+/* About Page Styles */
+.about-content {
+  text-align: left;
+  margin-top: 2rem;
+}
+
+.about-content::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.profile-picture {
+  border-radius: 8px;
+  width: 250px;
+  object-fit: cover;
+  float: left;
+  margin-right: 2rem;
+  margin-bottom: 1rem;
+}
+
+.bio p {
+  margin-top: 0;
+}
+
+/* Social Media Logos in Footer */
+.social-links a {
+  color: var(--text); /* Make the logos inherit the text color */
+  display: inline-block;
+}
+
+.social-links a:hover {
+  color: var(--primary-accent); /* Change color on hover */
+  text-decoration: none;
+}
+
+.social-icon { /* For the GitHub SVG */
+  width: 24px;
+  height: 24px;
+}
+
+.social-logo { /* For the LinkedIn PNG */
+  width: 24px;
+  height: 24px;
+}
+
+.dark-mode-logo {
+  display: none;
+}
+.light-mode-logo {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  .dark-mode-logo {
+    display: block;
+  }
+  .light-mode-logo {
+    display: none;
+  }
+}
