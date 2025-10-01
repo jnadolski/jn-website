@@ -87,6 +87,11 @@ a:hover {
   align-items: center;
   padding: 1rem 2rem;
   border-bottom: 1px solid var(--border);
+  min-height: 4rem;
+}
+
+main {
+  padding-top: 4rem; /* Offset for fixed header */
 }
 
 .logo-link {
@@ -110,6 +115,7 @@ a:hover {
 .site-header nav {
   display: flex;
   gap: 1.5rem;
+  flex-shrink: 0;
 }
 
 /* Footer Styles */
