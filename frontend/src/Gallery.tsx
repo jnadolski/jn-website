@@ -12,7 +12,6 @@ const Gallery = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log('Gallery.tsx - API URL from environment:', process.env.REACT_APP_API_URL);
     const fetchImages = async () => {
       try {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/gallery`);
