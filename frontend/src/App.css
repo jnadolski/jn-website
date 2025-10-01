@@ -104,6 +104,9 @@ main {
   font-weight: bold;
   font-size: 1.2rem;
   color: var(--text); /* Make the text next to the logo match the body text color */
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide overflowing content */
+  text-overflow: ellipsis; /* Show ellipsis for truncated text */
 }
 
 .logo-link:hover {
@@ -117,7 +120,7 @@ main {
 
 .site-header nav {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   flex-shrink: 0;
 }
 
