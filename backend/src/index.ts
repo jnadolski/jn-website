@@ -2,7 +2,7 @@ import express from 'express';
 import * as admin from 'firebase-admin';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken
+import jwt from 'jsonwebtoken';
 import { Buffer } from 'buffer'; // Import Buffer
 
 // Initialize Firebase Admin SDK
