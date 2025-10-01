@@ -89,7 +89,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1rem 1rem;
   border-bottom: 1px solid var(--border);
   min-height: 4rem;
 }
@@ -128,7 +128,7 @@ main {
 
 .main-nav {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   align-items: center;
 }
 
