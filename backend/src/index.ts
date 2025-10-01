@@ -2,14 +2,28 @@ import express from 'express';
 import * as admin from 'firebase-admin';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken
+import { Buffer } from 'buffer'; // Import Buffer
 
 // Initialize Firebase Admin SDK
 try {
-  admin.initializeApp({
-    credential: admin.credential.applicationDefault(),
-    databaseURL: 'https://jennyos.firebaseio.com'
-  });
+  let firebaseConfig;
+  const serviceAccountJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
+
+  if (serviceAccountJson) {
+    // Decode the base64 string and parse it as JSON
+    firebaseConfig = JSON.parse(Buffer.from(serviceAccountJson, 'base64').toString('utf8'));
+    admin.initializeApp({
+      credential: admin.credential.cert(firebaseConfig),
+      databaseURL: 'https://jennyos.firebaseio.com'
+    });
+  } else {
+    // Fallback to applicationDefault if env var is not set (e.g., local development)
+    admin.initializeApp({
+      credential: admin.credential.applicationDefault(),
+      databaseURL: 'https://jennyos.firebaseio.com'
+    });
+  }
   console.log('Firebase Admin SDK initialized successfully.');
 } catch (error) {
   console.error('Error initializing Firebase Admin SDK:', error);
