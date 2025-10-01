@@ -27,7 +27,7 @@ try {
   console.log('Firebase Admin SDK initialized successfully.');
 } catch (error) {
   console.error('Error initializing Firebase Admin SDK:', error);
-  process.exit(1);
+  // process.exit(1); // Temporarily removed to debug server exit
 }
 
 
