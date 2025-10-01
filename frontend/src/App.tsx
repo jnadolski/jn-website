@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import ProtectedRoute from './ProtectedRoute';
@@ -23,6 +23,35 @@ const AnimatedSection: React.FC<{ children: React.ReactNode }> = ({ children }) 
 };
 
 function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    let title = "Jennifer Nadolski";
+    switch (location.pathname) {
+      case "/":
+        title += " | Portfolio";
+        break;
+      case "/projects":
+        title += " | Projects";
+        break;
+      case "/gallery":
+        title += " | Gallery";
+        break;
+      case "/about":
+        title += " | About";
+        break;
+      case "/login":
+        title += " | Login";
+        break;
+      case "/dashboard":
+        title += " | Dashboard";
+        break;
+      default:
+        title += " | Page Not Found";
+    }
+    document.title = title;
+  }, [location]);
+
   return (
     <Router>
       <div className="App">
