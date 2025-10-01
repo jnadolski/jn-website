@@ -24,6 +24,10 @@
   }
 }
 
+html, body, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: var(--font-family-body);
@@ -146,7 +150,11 @@ main {
 /* Mobile Navigation Styles */
 @media (max-width: 768px) {
   .site-header {
-    padding: 1rem;
+    padding: 1rem; /* Reduce horizontal padding on mobile */
+  }
+
+  .main-nav {
+    gap: 0.5rem; /* Reduce gap between nav items on mobile */
   }
 
   .hamburger-menu-button {
