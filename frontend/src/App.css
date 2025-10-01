@@ -84,17 +84,15 @@ a:hover {
   backdrop-filter: blur(10px); /* Glassmorphism effect */
   -webkit-backdrop-filter: blur(10px); /* For Safari support */
   display: flex;
-  flex-wrap: wrap; /* Allow items to wrap */
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
   border-bottom: 1px solid var(--border);
   min-height: 4rem;
-  height: auto; /* Allow height to adjust if content wraps */
 }
 
 main {
-  padding-top: 5rem; /* Offset for fixed header */
+  padding-top: 4rem; /* Offset for fixed header */
 }
 
 .logo-link {
