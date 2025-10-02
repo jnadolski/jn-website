@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "tsc --project ./tsconfig.json",
     "start": "node dist/index.js",
     "dev": "nodemon --exec ts-node src/index.ts"
   },
@@ -19,7 +19,6 @@
     "express": "^5.1.0",
     "firebase-admin": "^13.5.0",
     "jsonwebtoken": "^9.0.2",
-    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "devDependencies": {
@@ -28,6 +27,7 @@
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.6.1",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2"
   }
 }
