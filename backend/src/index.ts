@@ -58,8 +58,15 @@ function initializeAppAndServer() {
 
     // Middleware Setup
     app.use(express.json());
+    const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : [];
     app.use(cors({
-        origin: process.env.CORS_ORIGIN,
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         credentials: true,
     }));
     app.use('/api', AuthRouter(db) as express.Router);
