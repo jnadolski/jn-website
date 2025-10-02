@@ -9,3 +9,6 @@ dist
 
 # Firebase credentials
 jennyos-firebase-adminsdk-fbsvc-15a2667130.json
+
+# Secrets
+/secrets

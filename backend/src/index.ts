@@ -1,347 +1,78 @@
-import dotenv from 'dotenv';
+// backend/src/index.ts
+
+import * as express from 'express';
+import * as admin from 'firebase-admin';
+import { initializeApp } from 'firebase-admin/app';
+import { getFirestore, Firestore } from 'firebase-admin/firestore';
+import * as dotenv from 'dotenv';
+
+// Import Routers/Middleware (Assuming these imports exist)
+
+import createProjectsRouter from './routes/ProjectsRouter'; // Import Projects Router
+
+// Load Environment Variables (Necessary for JWT_SECRET and PORT)
 dotenv.config();
 
-import express from 'express';
-import * as admin from 'firebase-admin';
-import cors from 'cors';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { Buffer } from 'buffer'; // Import Buffer
-import fs from 'fs'; // Import fs
+// --- 1. GLOBAL VARIABLE DECLARATION ---
+// Use 'let' to allow assignment later, outside any block scope.
+let db: Firestore;
+const app: express.Application = express(); // Define app once at the module level
 
-// Initialize Firebase Admin SDK
-try {
-  let firebaseConfig;
-  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-    console.log('DEBUG: process.env.GOOGLE_APPLICATION_CREDENTIALS:', process.env.GOOGLE_APPLICATION_CREDENTIALS);
-    const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-    const serviceAccountJsonContent = fs.readFileSync(serviceAccountPath, 'utf8');
-    firebaseConfig = JSON.parse(serviceAccountJsonContent);
-  } else if (process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
-    // Fallback for environments where GOOGLE_APPLICATION_CREDENTIALS is not a file path
-    firebaseConfig = JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64, 'base64').toString('utf8'));
-  } else {
-    throw new Error("Neither GOOGLE_APPLICATION_CREDENTIALS nor FIREBASE_SERVICE_ACCOUNT_BASE64 is set.");
-  }
+// --- 2. INITIALIZATION FUNCTION ---
+// Function to handle all critical setup: Firebase, Express Middleware, and Listener.
+function initializeAppAndServer() {
+    
+    // Check for Critical Environment Variable (Best Practice)
+    if (!process.env.JWT_SECRET) {
+        throw new Error("FATAL: JWT_SECRET environment variable is not defined.");
+    }
+    
+    // --- FIREBASE INITIALIZATION ---
+    try {
+        // Assuming you use service account credentials, adjust path as needed
+        const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH || './service-account.json';
+        const fsModule = require('fs');
+        const serviceAccount = JSON.parse(fsModule.readFileSync(serviceAccountPath, 'utf8')); 
+        
+        initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+        });
+        
+        // Assign the Firestore instance to the globally declared variable
+        db = getFirestore();
+        console.log("Firebase Admin SDK initialized and Firestore instance obtained.");
+        
+    } catch (error) {
+        console.error("CRITICAL ERROR: Failed to initialize Firebase Admin SDK.", error);
+        // Do not proceed if the database connection fails
+        process.exit(1); 
+    }
+    
+    // --- EXPRESS APPLICATION SETUP (Now safe to use 'db') ---
+    
+    // Middleware Setup
+    app.use(express.json());
+    // ... add CORS, logging, and other general middleware here ...
 
-  console.log('DEBUG: Firebase project_id from config:', firebaseConfig.project_id);
+    // Route Definitions
+    // Example: Integrating the Projects Router
+    // Note: The router function will need to be updated to accept (db) if it's not already.
+//    app.use('/api/projects', createProjectsRouter(db)); 
+    
+    // Example: A public health check
+    app.get('/', (req, res) => {
+        res.status(200).send('API is running.');
+    });
 
-  admin.initializeApp({
-    credential: admin.credential.cert(firebaseConfig),
-    databaseURL: 'https://jennyos.firebaseio.com'
-  });
-  console.log('Firebase Admin SDK initialized successfully.');
-} catch (error) {
-  console.error('Error initializing Firebase Admin SDK:', error);
-  // process.exit(1); // Temporarily removed to debug server exit
+    // --- START SERVER LISTENING ---
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`Server listening on port ${PORT}`);
+    });
 }
 
+// Execute the main initialization function
+initializeAppAndServer();
 
-const db = admin.firestore();
-
-const app = express();
-const port = process.env.PORT || 3001;
-
-// Middleware to parse JSON bodies
-app.use(express.json());
-
-// Middleware for CORS
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000'
-}));
-
-app.get('/', (req, res) => {
-  res.send('Hello from the jennyOS backend!');
-});
-
-// --- Setup Endpoint (for one-time use) ---
-app.post('/api/setup', async (req, res) => {
-  const { password } = req.body;
-
-  if (!password) {
-    return res.status(400).json({ message: 'Password is required' });
-  }
-
-  try {
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    const userRef = db.collection('users').doc('admin');
-    await userRef.set({
-      hashedPassword,
-      username: 'admin'
-    });
-
-    res.status(200).json({ message: 'Admin user setup complete.' });
-  } catch (error) {
-    console.error('Error during setup:', error);
-    res.status(500).json({ message: 'Error during setup.' });
-  }
-});
-
-// IMPORTANT: In a real application, this secret should be stored in an environment variable.
-const JWT_SECRET = 'your-super-secret-key-that-should-be-long-and-random';
-
-// --- Middleware to authenticate JWT ---
-const authenticateToken = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (token == null) return res.sendStatus(401); // if there isn't any token
-
-  jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
-    if (err) return res.sendStatus(403); // if the token is no longer valid
-    (req as any).user = user;
-    next(); // proceed to the next middleware or route handler
-  });
-};
-
-// --- Login Endpoint ---
-app.post('/api/login', async (req, res) => {
-  const { password } = req.body;
-
-  if (!password) {
-    return res.status(400).json({ message: 'Password is required' });
-  }
-
-  try {
-    const userRef = db.collection('users').doc('admin');
-    const doc = await userRef.get();
-
-    if (!doc.exists) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
-
-    const userData = doc.data();
-    if (!userData) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
-
-    const isPasswordCorrect = await bcrypt.compare(password, userData.hashedPassword);
-
-    if (!isPasswordCorrect) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
-
-    // Password is correct, generate a JWT
-    const token = jwt.sign({ userId: doc.id, username: userData.username }, JWT_SECRET, {
-      expiresIn: '1h', // Token expires in 1 hour
-    });
-
-    res.status(200).json({ message: 'Login successful', token });
-
-  } catch (error) {
-    console.error('Error during login:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-// --- Setup Projects Endpoint (for one-time use) ---
-app.post('/api/setup-projects', async (req, res) => {
-  try {
-    const projects = [
-      { title: 'Project Alpha', description: 'A description for Project Alpha.', url: '#', technologies: ['React', 'Node.js', 'Firestore'] },
-      { title: 'Project Beta', description: 'A description for Project Beta.', url: '#', technologies: ['TypeScript', 'Express'] },
-      { title: 'Project Gamma', description: 'A description for Project Gamma.', url: '#', technologies: ['HTML', 'CSS', 'JavaScript'] },
-    ];
-
-    const projectsCollection = db.collection('projects');
-    const batch = db.batch();
-
-    projects.forEach(project => {
-      const docRef = projectsCollection.doc(); // Automatically generate unique ID
-      batch.set(docRef, project);
-    });
-
-    await batch.commit();
-    res.status(200).json({ message: 'Projects seeded successfully.' });
-  } catch (error) {
-    console.error('Error seeding projects:', error);
-    res.status(500).json({ message: 'Error seeding projects.' });
-  }
-});
-
-// --- Get Projects Endpoint ---
-app.get('/api/projects', async (req, res) => {
-  try {
-    const projectsCollection = db.collection('projects');
-    const snapshot = await projectsCollection.get();
-    const projects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    res.status(200).json(projects);
-  } catch (error) {
-    console.error('Error fetching projects:', error);
-    res.status(500).json({ message: 'Error fetching projects.' });
-  }
-});
-
-// --- Create Project Endpoint ---
-app.post('/api/projects', authenticateToken, async (req, res) => {
-  try {
-    const project = req.body;
-    const projectsCollection = db.collection('projects');
-    const docRef = await projectsCollection.add(project);
-    res.status(201).json({ id: docRef.id, ...project });
-  } catch (error) {
-    console.error('Error creating project:', error);
-    res.status(500).json({ message: 'Error creating project.' });
-  }
-});
-
-// --- Update Project Endpoint ---
-app.put('/api/projects/:id', authenticateToken, async (req, res) => {
-  try {
-    const projectId = req.params.id;
-    const projectData = req.body;
-    const projectRef = db.collection('projects').doc(projectId);
-    await projectRef.update(projectData);
-    res.status(200).json({ id: projectId, ...projectData });
-  } catch (error) {
-    console.error('Error updating project:', error);
-    res.status(500).json({ message: 'Error updating project.' });
-  }
-});
-
-// --- Delete Project Endpoint ---
-app.delete('/api/projects/:id', authenticateToken, async (req, res) => {
-  try {
-    const projectId = req.params.id;
-    const projectRef = db.collection('projects').doc(projectId);
-    await projectRef.delete();
-    res.status(200).json({ message: `Project ${projectId} deleted successfully.` });
-  } catch (error) {
-    console.error('Error deleting project:', error);
-    res.status(500).json({ message: 'Error deleting project.' });
-  }
-});
-
-// --- Setup Gallery Endpoint (for one-time use) ---
-app.post('/api/setup-gallery', async (req, res) => {
-  try {
-    const images = [
-      { imageUrl: 'https://picsum.photos/seed/picsum1/800/600', caption: 'Sample Image 1' },
-      { imageUrl: 'https://picsum.photos/seed/picsum2/800/600', caption: 'Sample Image 2' },
-      { imageUrl: 'https://picsum.photos/seed/picsum3/800/600', caption: 'Sample Image 3' },
-      { imageUrl: 'https://picsum.photos/seed/picsum4/800/600', caption: 'Sample Image 4' },
-      { imageUrl: 'https://picsum.photos/seed/picsum5/800/600', caption: 'Sample Image 5' },
-      { imageUrl: 'https://picsum.photos/seed/picsum6/800/600', caption: 'Sample Image 6' },
-    ];
-
-    const galleryCollection = db.collection('gallery');
-    const batch = db.batch();
-
-    images.forEach(image => {
-      const docRef = galleryCollection.doc();
-      batch.set(docRef, image);
-    });
-
-    await batch.commit();
-    res.status(200).json({ message: 'Gallery seeded successfully.' });
-  } catch (error) {
-    console.error('Error seeding gallery:', error);
-    res.status(500).json({ message: 'Error seeding gallery.' });
-  }
-});
-
-// --- Get Gallery Endpoint ---
-app.get('/api/gallery', async (req, res) => {
-  try {
-    const galleryCollection = db.collection('gallery');
-    const snapshot = await galleryCollection.get();
-    const images = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    res.status(200).json(images);
-  } catch (error) {
-    console.error('Error fetching gallery images:', error);
-    res.status(500).json({ message: 'Error fetching gallery images.' });
-  }
-});
-
-// --- Get Page Content Endpoint ---
-app.get('/api/pages/:pageName', async (req, res) => {
-  try {
-    const pageName = req.params.pageName;
-    const pageRef = db.collection('pages').doc(pageName);
-    const doc = await pageRef.get();
-
-    if (!doc.exists) {
-      return res.status(404).json({ message: 'Page not found' });
-    }
-
-    res.status(200).json({ id: doc.id, ...doc.data() });
-  } catch (error) {
-    console.error('Error fetching page:', error);
-    res.status(500).json({ message: 'Error fetching page.', error: error });
-  }
-});
-
-// --- Update Page Content Endpoint ---
-app.put('/api/pages/:pageName', authenticateToken, async (req, res) => {
-  try {
-    const pageName = req.params.pageName;
-    const pageData = req.body;
-    const pageRef = db.collection('pages').doc(pageName);
-    await pageRef.set(pageData, { merge: true }); // Use set with merge to create if not exists
-    res.status(200).json({ id: pageName, ...pageData });
-  } catch (error) {
-    console.error('Error updating page:', error);
-    res.status(500).json({ message: 'Error updating page.' });
-  }
-});
-
-// --- Update Projects Endpoint (for one-time use) ---
-app.post('/api/update-projects', async (req, res) => {
-  try {
-    const projectsCollection = db.collection('projects');
-
-    // 1. Delete all existing projects
-    const existingProjects = await projectsCollection.get();
-    const batch = db.batch();
-    existingProjects.docs.forEach(doc => {
-      batch.delete(doc.ref);
-    });
-
-    // 2. Add the new project
-    const newProject = {
-      title: 'AI-Powered File Organizer',
-      description: 'An AI-powered file organizer with a PyQt6 GUI, built with Gemini API, and cross-platform support for macOS and Windows. It intelligently categorizes files and folders based on their name and content.',
-      url: 'https://github.com/jnadolski/ai-file-organizer',
-      technologies: ['Python', 'PyQt6', 'Gemini API', 'macOS', 'Windows', 'AI', 'cross-platform', 'GitHub Actions', 'py2app']
-    };
-    const newDocRef = projectsCollection.doc();
-    batch.set(newDocRef, newProject);
-
-    // 3. Commit the batch
-    await batch.commit();
-
-    res.status(200).json({ message: 'Projects updated successfully.' });
-  } catch (error) {
-    console.error('Error updating projects:', error);
-    res.status(500).json({ message: 'Error updating projects.' });
-  }
-});
-
-// --- Setup About Page Endpoint (for one-time use) ---
-app.post('/api/setup-about', async (req, res) => {
-  try {
-    const aboutContent = {
-      title: 'About Me',
-      bio: [
-        'My professional discipline is defined by a commitment to building <b>organized, functional systems</b>. As a <b>Software Engineer</b>, I focus on solving <b>full-stack problems</b> efficiently and ensuring the final product maintains a clean, meticulous <b>native look and feel</b>.',
-        'My expertise is anchored in <b>systems-level development</b>, leveraging over three years with <b>C++</b> and Python. My role primarily involves writing high-performance code, executing meticulous <b>code reviews</b>, and performing the critical <b>debugging</b> necessary to ensure structural integrity across the system.',
-        'My capability is proven by the <b>AI-Powered File Organizer</b>. I personally handled the full product lifecycle for this high-performance system, <b>architecting the entire process</b> and directing the Python implementation to integrate the <b>Gemini API</b> for intelligent analysis. This showcased my ability to manage complexity, package the product cross-platform, and establish the automated <b>GitHub Actions CI/CD pipeline</b>.'
-      ]
-    };
-
-    const pageRef = db.collection('pages').doc('about');
-    await pageRef.set(aboutContent);
-
-    res.status(200).json({ message: 'About page content seeded successfully.' });
-  } catch (error) {
-    console.error('Error seeding about page content:', error);
-    res.status(500).json({ message: 'Error seeding about page content.' });
-  }
-});
-
-
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+// --- EXPORT THE APP (Common for testing or serverless functions) ---
+export { app };
