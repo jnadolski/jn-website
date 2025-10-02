@@ -1,26 +1,26 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 
-// IMPORTANT: In a real application, this secret should be stored in an environment variable.
-const JWT_SECRET = process.env.JWT_SECRET;
-
-if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET is not defined in environment variables.');
-}
-
+// Extend the Request interface to include a user property
 interface AuthenticatedRequest extends Request {
-  user?: { userId: string; username: string };
+    user?: { userId: string; email: string; }; // Or whatever your JWT payload contains
 }
 
 export const authenticateToken = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
-  if (token == null) return res.sendStatus(401); // if there isn't any token
+    if (token == null) {
+        return res.status(401).json({ message: 'Authentication token required.' });
+    }
 
-  jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
-    if (err) return res.sendStatus(403); // if the token is no longer valid
-    req.user = user;
-    next(); // proceed to the next middleware or route handler
-  });
+    jwt.verify(token, process.env.JWT_SECRET as string, (err, user) => {
+        if (err) {
+            console.error("JWT verification error:", err);
+            return res.status(403).json({ message: 'Invalid or expired token.' });
+        }
+        // Attach the user payload to the request object
+        req.user = user as { userId: string; email: string; }; // Cast to your expected user payload type
+        next(); // Proceed to the next middleware/route handler
+    });
 };

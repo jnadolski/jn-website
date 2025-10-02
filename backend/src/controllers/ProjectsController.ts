@@ -1,69 +1,55 @@
-// src/controllers/ProjectsController.ts
 import { Request, Response } from 'express';
 import { Firestore } from 'firebase-admin/firestore';
-import { NewProject, Project, ProjectData } from '../types/Project'; 
 
-// 1. GET /api/projects - READ ALL
-export const getProjects = (db: Firestore) => async (req: Request, res: Response): Promise<void> => {
-    const projectsCollection = db.collection('projects');
+// Placeholder for JWT verification (to be implemented in authMiddleware)
+interface AuthenticatedRequest extends Request {
+    user?: { userId: string; email: string; }; // Or whatever your JWT payload contains
+}
+
+// GET /api/projects
+export const getProjects = (db: Firestore) => async (req: Request, res: Response) => {
     try {
-        const snapshot = await projectsCollection.get();
-        const projects = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...(doc.data() as ProjectData)
-        }));
+        const projectsRef = db.collection('projects');
+        const snapshot = await projectsRef.get();
+        const projects: any[] = [];
+        snapshot.forEach(doc => {
+            projects.push({ id: doc.id, ...doc.data() });
+        });
         res.status(200).json(projects);
     } catch (error) {
         console.error("Error fetching projects:", error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ message: "Error fetching projects" });
     }
 };
 
-// 2. POST /api/projects - CREATE
-export const createProject = (db: Firestore) => async (req: Request, res: Response): Promise<void> => {
-    const projectsCollection = db.collection('projects');
-    const newProjectData: NewProject = req.body; 
-
-    if (!newProjectData.title || !newProjectData.techStack) {
-        res.status(400).send('Missing required project fields.');
-        return;
-    }
-    
+// POST /api/projects
+export const createProject = (db: Firestore) => async (req: AuthenticatedRequest, res: Response) => {
     try {
-        const docRef = await projectsCollection.add(newProjectData);
-        res.status(201).json({ id: docRef.id, message: 'Project created successfully.' });
+        // In a real app, you'd validate req.body and ensure user is authorized
+        // For now, we'll just save the project data
+        const newProject = req.body;
+        const projectsRef = db.collection('projects');
+        const docRef = await projectsRef.add(newProject);
+        res.status(201).json({ id: docRef.id, ...newProject });
     } catch (error) {
-        res.status(500).send('Failed to create project.');
+        console.error("Error creating project:", error);
+        res.status(500).json({ message: "Error creating project" });
     }
 };
 
-// 3. PUT /api/projects/:id - UPDATE
-export const updateProject = (db: Firestore) => async (req: Request, res: Response): Promise<void> => {
-    const projectsCollection = db.collection('projects');
-    const { id } = req.params;
-    const updateData = req.body; 
-    
+// PUT /api/projects/:id
+export const updateProject = (db: Firestore) => async (req: AuthenticatedRequest, res: Response) => {
     try {
-        await projectsCollection.doc(id).update(updateData);
-        res.status(200).json({ id, message: 'Project updated successfully.' });
-    } catch (error) {
-         if (error instanceof Error && error.message.includes('NOT_FOUND')) {
-             res.status(404).send('Project not found.');
-        } else {
-             res.status(500).send('Failed to update project.');
-        }
-    }
-};
+        const { id } = req.params;
+        const updatedProject = req.body;
 
-// 4. DELETE /api/projects/:id - DELETE
-export const deleteProject = (db: Firestore) => async (req: Request, res: Response): Promise<void> => {
-    const projectsCollection = db.collection('projects');
-    const { id } = req.params;
-    
-    try {
-        await projectsCollection.doc(id).delete();
-        res.status(204).send();
+        // In a real app, you'd validate req.body and ensure user is authorized
+        // For now, we'll just update the project data
+        const projectRef = db.collection('projects').doc(id);
+        await projectRef.update(updatedProject);
+        res.status(200).json({ id, ...updatedProject });
     } catch (error) {
-        res.status(500).send('Failed to delete project.');
+        console.error("Error updating project:", error);
+        res.status(500).json({ message: "Error updating project" });
     }
 };
