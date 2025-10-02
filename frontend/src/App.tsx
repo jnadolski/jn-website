@@ -5,7 +5,6 @@ import Dashboard from './Dashboard';
 import ProtectedRoute from './ProtectedRoute';
 import Landing from './Landing';
 import Projects from './Projects';
-import Gallery from './Gallery';
 import About from './About';
 import Header from './Header';
 import Footer from './Footer';
@@ -34,9 +33,7 @@ function App() {
       case "/projects":
         title += " | Projects";
         break;
-      case "/gallery":
-        title += " | Gallery";
-        break;
+
       case "/about":
         title += " | About";
         break;
@@ -60,7 +57,6 @@ function App() {
           <Route path="/" element={<AnimatedSection><Landing /></AnimatedSection>} />
           <Route path="/login" element={<Login />} />
           <Route path="/projects" element={<AnimatedSection><Projects /></AnimatedSection>} />
-          <Route path="/gallery" element={<AnimatedSection><Gallery /></AnimatedSection>} />
           <Route path="/about" element={<AnimatedSection><About /></AnimatedSection>} />
           
           <Route
@@ -79,3 +75,4 @@ function App() {
 }
 
 export default App;
+// Trigger Cloudflare Pages deployment
