@@ -69,14 +69,14 @@ function initializeAppAndServer() {
         },
         credentials: true,
     }));
-    app.use('/api', AuthRouter(db) as express.Router);
+    app.use('/api', AuthRouter(db));
     // ... add CORS, logging, and other general middleware here ...
 
     // Route Definitions
     // Example: Integrating the Projects Router
     // Note: The router function will need to be updated to accept (db) if it's not already.
-    app.use('/api/projects', createProjectsRouter(db) as express.Router); 
-    app.use('/api/pages', PagesRouter(db) as express.Router);
+    app.use('/api/projects', createProjectsRouter(db)); 
+    app.use('/api/pages', PagesRouter(db));
 
     // Example: A public health check
     app.get('/', (req, res) => {
