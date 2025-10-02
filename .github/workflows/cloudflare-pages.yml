@@ -30,10 +30,14 @@ jobs:
 
       - name: Install dependencies
         run: npm install # Or yarn install, pnpm install
+        working-directory: ./frontend
 
       - name: Build Frontend
         run: npm run build # Or yarn build, pnpm build
         working-directory: ./frontend # Assuming your frontend build command is run from the frontend directory
+
+      - name: Install Wrangler CLI
+        run: npm install -g wrangler
 
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1.5.0
