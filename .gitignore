@@ -12,3 +12,7 @@
 
 # Firebase credentials
 jennyos-firebase-adminsdk-fbsvc-15a2667130.json
+
+# Firebase Emulator Logs
+firebase-debug.log
+firestore-debug.log
