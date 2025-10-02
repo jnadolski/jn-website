@@ -28,4 +28,4 @@ const createAuthRouter = (db: Firestore): Router => {
     return router;
 };
 
-export default createAuthRouter;
+module.exports = createAuthRouter;

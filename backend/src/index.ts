@@ -10,9 +10,9 @@ import { getFirestore, Firestore } from 'firebase-admin/firestore';
 
 // Import Routers/Middleware (Assuming these imports exist)
 
-const createProjectsRouter = require('./routes/ProjectsRouter').default; // Import Projects Router
-const AuthRouter = require('./routes/AuthRouter').default; // Import the default export
-const PagesRouter = require('./routes/PagesRouter').default; // Import the default export
+const createProjectsRouter = require('./routes/ProjectsRouter'); // Import Projects Router
+const AuthRouter = require('./routes/AuthRouter'); // Import the default export
+const PagesRouter = require('./routes/PagesRouter'); // Import the default export
 
 let db: Firestore;
 const app: express.Application = express(); // Define app once at the module level

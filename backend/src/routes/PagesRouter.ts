@@ -15,4 +15,4 @@ const createPagesRouter = (db: Firestore): Router => {
     return router;
 };
 
-export default createPagesRouter;
+module.exports = createPagesRouter;
