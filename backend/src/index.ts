@@ -82,6 +82,20 @@ app.post('/api/setup', async (req, res) => {
 // IMPORTANT: In a real application, this secret should be stored in an environment variable.
 const JWT_SECRET = 'your-super-secret-key-that-should-be-long-and-random';
 
+// --- Middleware to authenticate JWT ---
+const authenticateToken = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) return res.sendStatus(401); // if there isn't any token
+
+  jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
+    if (err) return res.sendStatus(403); // if the token is no longer valid
+    (req as any).user = user;
+    next(); // proceed to the next middleware or route handler
+  });
+};
+
 // --- Login Endpoint ---
 app.post('/api/login', async (req, res) => {
   const { password } = req.body;
@@ -160,6 +174,46 @@ app.get('/api/projects', async (req, res) => {
   }
 });
 
+// --- Create Project Endpoint ---
+app.post('/api/projects', authenticateToken, async (req, res) => {
+  try {
+    const project = req.body;
+    const projectsCollection = db.collection('projects');
+    const docRef = await projectsCollection.add(project);
+    res.status(201).json({ id: docRef.id, ...project });
+  } catch (error) {
+    console.error('Error creating project:', error);
+    res.status(500).json({ message: 'Error creating project.' });
+  }
+});
+
+// --- Update Project Endpoint ---
+app.put('/api/projects/:id', authenticateToken, async (req, res) => {
+  try {
+    const projectId = req.params.id;
+    const projectData = req.body;
+    const projectRef = db.collection('projects').doc(projectId);
+    await projectRef.update(projectData);
+    res.status(200).json({ id: projectId, ...projectData });
+  } catch (error) {
+    console.error('Error updating project:', error);
+    res.status(500).json({ message: 'Error updating project.' });
+  }
+});
+
+// --- Delete Project Endpoint ---
+app.delete('/api/projects/:id', authenticateToken, async (req, res) => {
+  try {
+    const projectId = req.params.id;
+    const projectRef = db.collection('projects').doc(projectId);
+    await projectRef.delete();
+    res.status(200).json({ message: `Project ${projectId} deleted successfully.` });
+  } catch (error) {
+    console.error('Error deleting project:', error);
+    res.status(500).json({ message: 'Error deleting project.' });
+  }
+});
+
 // --- Setup Gallery Endpoint (for one-time use) ---
 app.post('/api/setup-gallery', async (req, res) => {
   try {
@@ -201,6 +255,38 @@ app.get('/api/gallery', async (req, res) => {
   }
 });
 
+// --- Get Page Content Endpoint ---
+app.get('/api/pages/:pageName', async (req, res) => {
+  try {
+    const pageName = req.params.pageName;
+    const pageRef = db.collection('pages').doc(pageName);
+    const doc = await pageRef.get();
+
+    if (!doc.exists) {
+      return res.status(404).json({ message: 'Page not found' });
+    }
+
+    res.status(200).json({ id: doc.id, ...doc.data() });
+  } catch (error) {
+    console.error('Error fetching page:', error);
+    res.status(500).json({ message: 'Error fetching page.', error: error });
+  }
+});
+
+// --- Update Page Content Endpoint ---
+app.put('/api/pages/:pageName', authenticateToken, async (req, res) => {
+  try {
+    const pageName = req.params.pageName;
+    const pageData = req.body;
+    const pageRef = db.collection('pages').doc(pageName);
+    await pageRef.set(pageData, { merge: true }); // Use set with merge to create if not exists
+    res.status(200).json({ id: pageName, ...pageData });
+  } catch (error) {
+    console.error('Error updating page:', error);
+    res.status(500).json({ message: 'Error updating page.' });
+  }
+});
+
 // --- Update Projects Endpoint (for one-time use) ---
 app.post('/api/update-projects', async (req, res) => {
   try {
@@ -230,6 +316,28 @@ app.post('/api/update-projects', async (req, res) => {
   } catch (error) {
     console.error('Error updating projects:', error);
     res.status(500).json({ message: 'Error updating projects.' });
+  }
+});
+
+// --- Setup About Page Endpoint (for one-time use) ---
+app.post('/api/setup-about', async (req, res) => {
+  try {
+    const aboutContent = {
+      title: 'About Me',
+      bio: [
+        'My professional discipline is defined by a commitment to building <b>organized, functional systems</b>. As a <b>Software Engineer</b>, I focus on solving <b>full-stack problems</b> efficiently and ensuring the final product maintains a clean, meticulous <b>native look and feel</b>.',
+        'My expertise is anchored in <b>systems-level development</b>, leveraging over three years with <b>C++</b> and Python. My role primarily involves writing high-performance code, executing meticulous <b>code reviews</b>, and performing the critical <b>debugging</b> necessary to ensure structural integrity across the system.',
+        'My capability is proven by the <b>AI-Powered File Organizer</b>. I personally handled the full product lifecycle for this high-performance system, <b>architecting the entire process</b> and directing the Python implementation to integrate the <b>Gemini API</b> for intelligent analysis. This showcased my ability to manage complexity, package the product cross-platform, and establish the automated <b>GitHub Actions CI/CD pipeline</b>.'
+      ]
+    };
+
+    const pageRef = db.collection('pages').doc('about');
+    await pageRef.set(aboutContent);
+
+    res.status(200).json({ message: 'About page content seeded successfully.' });
+  } catch (error) {
+    console.error('Error seeding about page content:', error);
+    res.status(500).json({ message: 'Error seeding about page content.' });
   }
 });
 

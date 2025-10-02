@@ -35,7 +35,6 @@ const Header = () => {
 
       <nav className={`main-nav ${isMobileMenuOpen ? 'is-open' : ''}`}>
         <Link to="/projects" onClick={() => setIsMobileMenuOpen(false)}>Projects</Link>
-        <Link to="/gallery" onClick={() => setIsMobileMenuOpen(false)}>Gallery</Link>
         <Link to="/about" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
 
         <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="button primary" onClick={() => setIsMobileMenuOpen(false)}>Résumé</a>

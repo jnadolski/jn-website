@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import useDataFetching from './hooks/useDataFetching';
 
 interface Project {
   id: string;
@@ -9,29 +10,7 @@ interface Project {
 }
 
 const Projects = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/projects`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setProjects(data);
-      } catch (err) {
-        setError('Failed to fetch projects.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProjects();
-  }, []); // Empty dependency array means this effect runs once on mount
+  const { data: projects, loading, error } = useDataFetching<Project>(`${process.env.REACT_APP_API_URL}/api/projects`);
 
   if (loading) {
     return <div>Loading projects...</div>;

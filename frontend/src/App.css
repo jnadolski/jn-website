@@ -36,7 +36,6 @@ body {
   background-color: var(--background);
   color: var(--text);
   transition: background-color 0.3s, color 0.3s;
-  background-color: #111111; /* Deeper black background */
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.6;
@@ -89,7 +88,8 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1rem;
+  /* Applying 6rem padding to fixed header for alignment */
+  padding: 1rem 6rem;
   border-bottom: 1px solid var(--border);
   min-height: 4rem;
   overflow: hidden;
@@ -204,47 +204,66 @@ main {
   }
 }
 
-/* Footer Styles */
+/* Footer Styles (FINAL REORGANIZED BLOCK) */
 footer {
-  padding: 2rem;
+  /* Consistent 6rem padding */
+  padding: 3rem 6rem; 
   margin-top: 4rem;
   border-top: 1px solid var(--border);
   display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1rem;
+  flex-direction: column; /* Stack the rows vertically */
+  align-items: flex-start; /* Keep main content to the left */
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.contact-info, .social-links {
-  font-weight: bold;
+/* Row 1: Contact Information (Email and Social on one line) */
+.footer-contact-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 2rem; /* Add gap for internal horizontal spacing */
+}
+
+.contact-info {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: var(--text);
 }
 
 .contact-info a {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text);
-}
-
-.contact-info a:hover {
-  color: var(--primary-accent);
-  text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .social-links {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
+  color: var(--text);
 }
 
-.copyright {
-  width: 100%;
-  text-align: center;
-  font-size: 0.9rem;
-  margin-top: 2rem;
+.social-links a {
   color: var(--text);
-  opacity: 0.7;
+  transition: color 0.3s;
 }
+
+.social-links a:hover {
+  color: var(--primary-accent);
+}
+
+/* Copyright block - Centered and subtle */
+.copyright { /* Targeting the existing .copyright class */
+  width: 100%; /* Forces the div to span full width */
+  text-align: center; 
+  font-size: 0.85rem;
+  margin-top: 1.5rem;
+  color: var(--text);
+  opacity: 0.6; /* Subtlety */
+}
+
 
 /* Remove the default CRA styles */
 .App-logo { display: none; }
@@ -253,7 +272,7 @@ footer {
 
 /* Page Content Styles */
 .page-content {
-  padding: 0 2rem;
+  padding: 6rem 6rem 2rem 6rem;
 }
 
 /* Projects Page Styles */

@@ -5,7 +5,7 @@ import EmailIcon from './EmailIcon';
 const Footer = () => {
   return (
     <footer>
-      <div className="footer-contact-social">
+      <div className="footer-contact-row">
         <div className="contact-info">
           <a href="mailto:nadolskj@gmail.com">
             <EmailIcon />

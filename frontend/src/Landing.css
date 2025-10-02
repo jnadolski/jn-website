@@ -1,11 +1,7 @@
 .landing-page {
-  background-color: #111111;
 }
 
-body {
-  color: #EAEAEA; /* Global text color for dark mode */
-  padding: 0 2rem; /* Generous left and right padding */
-}
+
 
 .hero-section {
   min-height: calc(100vh - 4rem); /* Full viewport height minus header height */
@@ -14,7 +10,7 @@ body {
   justify-content: center;
   align-items: flex-start;
   padding: 2rem 6rem;
-  color: #ffffff; /* Ensure text is visible on dark background */
+  color: var(--text); /* Ensure text is visible on dark background */
   position: relative;
   overflow: hidden;
 }
@@ -26,15 +22,15 @@ body {
   font-weight: 700;
   margin-bottom: 0.5rem;
   line-height: 1.2;
-  max-width: 80vw;
-  color: #EAEAEA; /* New text color */
+  color: var(--text); /* New text color */
 }
 
 .hero-tagline {
-  font-size: 1.5rem;
+  font-size: 1.15rem;
   margin-bottom: 1rem;
   max-width: 800px;
-  color: #EAEAEA; /* New text color */
+  line-height: 1.4;
+  color: var(--text); /* New text color */
 }
 
 .hero-ctas {
@@ -68,8 +64,8 @@ body {
 
 .button.secondary {
   background-color: transparent;
-  color: #EAEAEA;
-  border: 1px solid #EAEAEA;
+  color: var(--text);
+  border: 1px solid var(--text);
 }
 
 .button.secondary:hover {
@@ -91,7 +87,7 @@ body {
 .landing-page h2 {
   border: none;
   font-weight: 700;
-  color: #EAEAEA;
+  color: var(--text);
 }
 
 .summary-about-me {

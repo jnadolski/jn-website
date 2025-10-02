@@ -7,7 +7,7 @@ const SummaryAboutMe = () => {
     <section className="summary-about-me">
       <h2>About Me</h2>
       <p>
-        I’ve always been a builder. From designing intricate family homes in The Sims to assembling complex LEGO models, my passion has always been in creating organized, functional systems from the ground up. That same passion is what led me to a career in software engineering.
+        My professional discipline is defined by a commitment to building <b>organized, functional systems</b>. As a <b>Software Engineer</b>, I focus on solving <b>full-stack problems</b> efficiently and ensuring the final product maintains a clean, meticulous <b>native look and feel</b>.
       </p>
       <Link to="/about" className="button secondary">Read Full Biography</Link>
     </section>

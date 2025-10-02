@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import useDataFetching from './hooks/useDataFetching';
 
 interface GalleryImage {
   id: string;
@@ -7,30 +8,7 @@ interface GalleryImage {
 }
 
 const Gallery = () => {
-  const [images, setImages] = useState<GalleryImage[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/gallery`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setImages(data);
-      } catch (err) {
-        setError('Failed to fetch images.');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchImages();
-  }, []);
+  const { data: images, loading, error } = useDataFetching<GalleryImage>(`${process.env.REACT_APP_API_URL}/api/gallery`);
 
   if (loading) {
     return <div>Loading images...</div>;
