@@ -36,10 +36,8 @@ jobs:
         run: 'echo "REACT_APP_API_URL is: ${{ secrets.REACT_APP_API_URL }}"'
 
       - name: Build Frontend
-        run: npm run build
+        run: REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} npm run build
         working-directory: ./frontend
-        env:
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
       - name: Install Wrangler CLI
         run: npm install -g wrangler
