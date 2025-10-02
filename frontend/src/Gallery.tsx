@@ -14,6 +14,7 @@ const Gallery = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
+        console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL);
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/gallery`);
         if (!response.ok) {
           throw new Error('Network response was not ok');

@@ -1,29 +1,35 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import * as admin from 'firebase-admin';
 import cors from 'cors';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Buffer } from 'buffer'; // Import Buffer
+import fs from 'fs'; // Import fs
 
 // Initialize Firebase Admin SDK
 try {
   let firebaseConfig;
-  const serviceAccountJson = process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON;
-
-  if (serviceAccountJson) {
-    // Decode the base64 string and parse it as JSON
-    firebaseConfig = JSON.parse(Buffer.from(serviceAccountJson, 'base64').toString('utf8'));
-    admin.initializeApp({
-      credential: admin.credential.cert(firebaseConfig),
-      databaseURL: 'https://jennyos.firebaseio.com'
-    });
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    console.log('DEBUG: process.env.GOOGLE_APPLICATION_CREDENTIALS:', process.env.GOOGLE_APPLICATION_CREDENTIALS);
+    const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+    const serviceAccountJsonContent = fs.readFileSync(serviceAccountPath, 'utf8');
+    firebaseConfig = JSON.parse(serviceAccountJsonContent);
+  } else if (process.env.FIREBASE_SERVICE_ACCOUNT_BASE64) {
+    // Fallback for environments where GOOGLE_APPLICATION_CREDENTIALS is not a file path
+    firebaseConfig = JSON.parse(Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_BASE64, 'base64').toString('utf8'));
   } else {
-    // Fallback to applicationDefault if env var is not set (e.g., local development)
-    admin.initializeApp({
-      credential: admin.credential.applicationDefault(),
-      databaseURL: 'https://jennyos.firebaseio.com'
-    });
+    throw new Error("Neither GOOGLE_APPLICATION_CREDENTIALS nor FIREBASE_SERVICE_ACCOUNT_BASE64 is set.");
   }
+
+  console.log('DEBUG: Firebase project_id from config:', firebaseConfig.project_id);
+
+  admin.initializeApp({
+    credential: admin.credential.cert(firebaseConfig),
+    databaseURL: 'https://jennyos.firebaseio.com'
+  });
   console.log('Firebase Admin SDK initialized successfully.');
 } catch (error) {
   console.error('Error initializing Firebase Admin SDK:', error);

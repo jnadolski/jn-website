@@ -1,0 +1,29 @@
+/* FeaturedProjects.css */
+.featured-projects {
+  padding: 2rem 6rem;
+}
+
+.featured-projects h2 {
+  font-weight: 700; /* Bold for contrast */
+  color: #EAEAEA; /* High contrast color */
+  margin-bottom: 0.5rem;
+}
+
+.project-card-content {
+  text-align: left; /* Left-align content inside project cards */
+}
+
+.projects-grid {
+  margin-bottom: 1rem;
+}
+
+.tech-tag {
+  display: inline-block;
+  background-color: #2C2C2E; /* Subtle dark background */
+  color: #EAEAEA; /* TEXT_DARK_MODE color */
+  padding: 0.25rem 0.5rem; /* Adequate padding */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 0.8rem; /* Smaller font size */
+  margin-right: 0.5rem; /* Spacing between tags */
+  margin-bottom: 0.5rem; /* Spacing for wrapped tags */
+}

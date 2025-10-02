@@ -37,7 +37,7 @@ const Header = () => {
         <Link to="/projects" onClick={() => setIsMobileMenuOpen(false)}>Projects</Link>
         <Link to="/gallery" onClick={() => setIsMobileMenuOpen(false)}>Gallery</Link>
         <Link to="/about" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
-        <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
+
         <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="button primary" onClick={() => setIsMobileMenuOpen(false)}>Résumé</a>
       </nav>
     </header>

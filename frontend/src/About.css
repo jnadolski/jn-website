@@ -1,0 +1,19 @@
+/* About.css */
+
+.profile-picture-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem; /* Space below the image */
+}
+
+.profile-picture {
+  border-radius: 50%; /* Make it circular */
+  border: 1px solid #38383A; /* Subtle border */
+  width: 150px; /* Fixed size */
+  height: 150px;
+  object-fit: cover; /* Ensure image covers the area */
+}
+
+.about-content {
+  padding: 0 6rem; /* Consistent horizontal padding */
+}

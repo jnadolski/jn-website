@@ -1,0 +1,15 @@
+/* SummaryAboutMe.css */
+.summary-about-me {
+  padding: 2rem 6rem;
+}
+
+.summary-about-me h2 {
+  font-weight: 700; /* Bold for contrast */
+  color: #EAEAEA; /* High contrast color */
+  margin-bottom: 0.5rem;
+}
+
+.summary-about-me p {
+  opacity: 0.8; /* Lower visual weight for body text */
+  margin-bottom: 1rem;
+}
