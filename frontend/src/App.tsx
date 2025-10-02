@@ -75,4 +75,4 @@ function App() {
 }
 
 export default App;
-// Trigger Cloudflare Pages deployment
+// Trigger Cloudflare Pages deployment (re-attempt)
