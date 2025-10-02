@@ -10,8 +10,8 @@ import { getFirestore, Firestore } from 'firebase-admin/firestore';
 
 // Import Routers/Middleware (Assuming these imports exist)
 
-import createProjectsRouter from './routes/ProjectsRouter'; // Import Projects Router
-import createAuthRouter from './routes/AuthRouter'; // Import Auth Router
+import ProjectsRouter from './routes/ProjectsRouter'; // Import the default export
+import AuthRouter from './routes/AuthRouter'; // Import the default export
 import PagesRouter from './routes/PagesRouter'; // Import the default export
 
 let db: Firestore;
@@ -62,14 +62,14 @@ function initializeAppAndServer() {
         origin: process.env.CORS_ORIGIN,
         credentials: true,
     }));
-    app.use('/api', createAuthRouter(db));
+    app.use('/api', AuthRouter(db));
     // ... add CORS, logging, and other general middleware here ...
 
     // Route Definitions
     // Example: Integrating the Projects Router
     // Note: The router function will need to be updated to accept (db) if it's not already.
-    app.use('/api/projects', createProjectsRouter(db)); 
-    app.use('/api/pages', createPagesRouter(db));
+    app.use('/api/projects', ProjectsRouter(db)); 
+    app.use('/api/pages', PagesRouter(db));
 
     // Example: A public health check
     app.get('/', (req, res) => {
