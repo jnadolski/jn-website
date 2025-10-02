@@ -1,0 +1,48 @@
+name: Deploy Frontend to Cloudflare Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+      - 'package.json'
+      - 'package-lock.json' # Assuming root package.json/lock for monorepo
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Or your preferred Node.js version
+
+      - name: Install dependencies
+        run: npm install # Or yarn install, pnpm install
+
+      - name: Build Frontend
+        run: npm run build # Or yarn build, pnpm build
+        working-directory: ./frontend # Assuming your frontend build command is run from the frontend directory
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          directory: frontend/build # Adjust this to your frontend's build output directory
+          # Optional: If you have a custom build command for Cloudflare Pages
+          # command: npm run deploy-frontend
+          # Optional: If you want to deploy to a specific branch environment
+          # branch: ${{ github.ref_name }}
