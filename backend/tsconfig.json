@@ -6,6 +6,9 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "baseUrl": "./src",
+    "paths": {
+      "@routes/*": ["routes/*"]
+    },
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
