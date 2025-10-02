@@ -32,6 +32,9 @@ jobs:
         run: npm install # Or yarn install, pnpm install
         working-directory: ./frontend
 
+      - name: Debug REACT_APP_API_URL
+        run: echo "REACT_APP_API_URL is: ${{ secrets.REACT_APP_API_URL }}"
+
       - name: Build Frontend
         run: npm run build
         working-directory: ./frontend
