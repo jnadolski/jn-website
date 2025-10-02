@@ -62,14 +62,14 @@ function initializeAppAndServer() {
         origin: process.env.CORS_ORIGIN,
         credentials: true,
     }));
-    app.use('/api', AuthRouter(db));
+    app.use('/api', AuthRouter(db) as express.Router);
     // ... add CORS, logging, and other general middleware here ...
 
     // Route Definitions
     // Example: Integrating the Projects Router
     // Note: The router function will need to be updated to accept (db) if it's not already.
-    app.use('/api/projects', createProjectsRouter(db)); 
-    app.use('/api/pages', PagesRouter(db));
+    app.use('/api/projects', createProjectsRouter(db) as express.Router); 
+    app.use('/api/pages', PagesRouter(db) as express.Router);
 
     // Example: A public health check
     app.get('/', (req, res) => {
