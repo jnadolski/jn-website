@@ -68,7 +68,7 @@ function initializeAppAndServer() {
     // Route Definitions
     // Example: Integrating the Projects Router
     // Note: The router function will need to be updated to accept (db) if it's not already.
-    app.use('/api/projects', ProjectsRouter(db)); 
+    app.use('/api/projects', createProjectsRouter(db)); 
     app.use('/api/pages', PagesRouter(db));
 
     // Example: A public health check
