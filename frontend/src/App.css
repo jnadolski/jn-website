@@ -1,3 +1,5 @@
+/* App.css */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 @import './FadeInOnScroll.css';
 @import './Landing.css';
@@ -5,22 +7,29 @@
 /* Define color variables for light mode (default) */
 :root {
   --background: #F9F9F9;
+  --background-rgb: 249, 249, 249;
   --text: #333333;
   --primary-accent: #96AA58;
   --secondary-accent: #D98C60;
-  --border: #E5E5E7;
+  --border: transparent;
   --font-family-body: 'Inter', sans-serif;
   --font-family-heading: 'Inter', sans-serif;
+
+  --gradient-color-1: #96AA58;
+  --gradient-color-2: #D98C60;
+  --gradient-color-3: #111111;
+  --gradient-color-4: #38383A;
 }
 
 /* Define color variables for dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #111111;
+    --background-rgb: 17, 17, 17;
     --text: #EAEAEA;
     --primary-accent: #96AA58;
     --secondary-accent: #D98C60;
-    --border: #38383A;
+    --border: transparent;
   }
 }
 
@@ -33,12 +42,12 @@ body {
   font-family: var(--font-family-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background);
   color: var(--text);
   transition: background-color 0.3s, color 0.3s;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.6;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -73,7 +82,66 @@ a:hover {
 }
 
 .App {
+  background-color: var(--background);
 }
+
+#gradient-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: conic-gradient(
+    from 0deg,
+    var(--gradient-color-1),
+    var(--gradient-color-2),
+    var(--gradient-color-3),
+    var(--gradient-color-4),
+    var(--gradient-color-1)
+  );
+  filter: blur(80px);
+  transform-origin: center;
+  animation: gradientRotate 180s linear infinite;
+  z-index: 1;
+}
+
+#gradient-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.5;
+  z-index: 2;
+}
+
+#noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
+  z-index: 3;
+  
+}
+
+.main-content {
+  position: relative;
+  z-index: 10;
+}
+
+@keyframes gradientRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 
 /* Header Styles */
 .site-header {
@@ -82,9 +150,10 @@ a:hover {
   left: 0;
   width: 100%;
   z-index: 1000;
-  background-color: rgba(var(--background-rgb), 0.8); /* Semi-transparent background */
+  background-color: rgba(var(--background-rgb), 0.8);
   backdrop-filter: blur(10px); /* Glassmorphism effect */
   -webkit-backdrop-filter: blur(10px); /* For Safari support */
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -99,6 +168,8 @@ a:hover {
 
 main {
   padding-top: 5.4rem; /* Offset for fixed header */
+  position: relative;
+  z-index: 10;
 }
 
 .logo-link {
@@ -215,6 +286,9 @@ footer {
   align-items: flex-start; /* Keep main content to the left */
   width: 100%;
   box-sizing: border-box;
+  background-color: var(--background);
+  position: relative;
+  z-index: 1000;
 }
 
 /* Row 1: Contact Information (Email and Social on one line) */

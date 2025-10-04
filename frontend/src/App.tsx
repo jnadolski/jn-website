@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Login from './Login';
 import Dashboard from './Dashboard';
@@ -23,6 +23,7 @@ const AnimatedSection: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
 function App() {
   const location = useLocation();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     let title = "Jennifer Nadolski";
@@ -49,8 +50,75 @@ function App() {
     document.title = title;
   }, [location]);
 
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animationFrameId: number;
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    const drawNoise = () => {
+      const imageData = ctx.createImageData(canvas.width, canvas.height);
+      const buffer32 = new Uint32Array(imageData.data.buffer);
+      const len = buffer32.length;
+
+      for (let i = 0; i < len; i++) {
+        if (Math.random() < 0.5) {
+          buffer32[i] = 0xffffffff;
+        }
+      }
+      ctx.putImageData(imageData, 0, 0);
+    };
+
+    const loop = () => {
+      drawNoise();
+      animationFrameId = requestAnimationFrame(loop);
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    loop();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  /*
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const gradientBg = document.getElementById('gradient-bg');
+      const noiseOverlay = document.getElementById('noise-overlay');
+
+      if (gradientBg) {
+        gradientBg.style.transform = `translateY(${scrollY * 0.5}px)`;
+      }
+
+      if (noiseOverlay) {
+        noiseOverlay.style.transform = `translateY(${scrollY * 0.5}px)`;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+  */
+
   return (
     <div className="App">
+      <div id="gradient-bg"></div>
+      <canvas id="noise-overlay" ref={canvasRef}></canvas>
       <Header />
       <main>
         <Routes>
@@ -75,4 +143,3 @@ function App() {
 }
 
 export default App;
-// Trigger Cloudflare Pages deployment (final check)
