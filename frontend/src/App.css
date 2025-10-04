@@ -83,6 +83,9 @@ a:hover {
 
 .App {
   background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 #gradient-bg {
@@ -170,6 +173,7 @@ main {
   padding-top: 5.4rem; /* Offset for fixed header */
   position: relative;
   z-index: 10;
+  flex-grow: 1;
 }
 
 .logo-link {
