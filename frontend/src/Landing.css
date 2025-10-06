@@ -18,7 +18,6 @@
 
 
 .hero-headline {
-  font-size: 2.2rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
   line-height: 1.2;
@@ -27,7 +26,7 @@
 
 .hero-tagline {
   font-size: 1.15rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   max-width: 800px;
   line-height: 1.4;
   color: var(--text); /* New text color */
@@ -49,9 +48,9 @@
 }
 
 .button.primary {
-  background-color: #96AA58;
-  color: #333333;
-  border: 1px solid #96AA58; /* Keep border for consistency, though it will match background */
+  background-color: var(--primary-accent);
+  color: #ffffff;
+  border: 1px solid var(--primary-accent); /* Keep border for consistency, though it will match background */
   margin-right: 1rem;
   filter: brightness(1.1);
 }
@@ -81,7 +80,7 @@
 }
 
 .project-card-content a {
-  color: #96AA58;
+  color: var(--primary-accent);
 }
 
 .landing-page h2 {
