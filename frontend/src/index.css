@@ -23,7 +23,7 @@ body {
 }
 
 .btn-retro {
-    background-color: var(--color-silver); /* Use CSS variable here */
+    background-color: var(--color-silver); 
     border: 1px solid #fff;
     border-right-color: #000;
     border-bottom-color: #000;
