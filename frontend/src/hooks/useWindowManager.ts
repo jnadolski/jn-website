@@ -52,10 +52,12 @@ export const useWindowManager = () => {
         setWindows(prevWindows => {
             const windowToFront = prevWindows.find(w => w.id === id);
             if (!windowToFront || windowToFront.zIndex === highestZIndex) {
+                setActiveWindowId(id);
                 return prevWindows;
             }
             const newZIndex = highestZIndex + 1;
             setHighestZIndex(newZIndex);
+            setActiveWindowId(id);
             return prevWindows.map(w => w.id === id ? { ...w, zIndex: newZIndex } : w);
         });
     };

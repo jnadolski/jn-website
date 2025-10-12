@@ -9,7 +9,7 @@ interface DesktopIconProps {
 const DesktopIcon: React.FC<DesktopIconProps> = ({ label, icon, onClick }) => {
     return (
         <div 
-            className="desktop-icon flex flex-col items-center gap-1 cursor-pointer w-20 text-center text-white p-2 hover:bg-blue-900/50" 
+            className="desktop-icon flex flex-col items-center gap-1 cursor-pointer w-20 text-center text-white p-2 hover:bg-navy" 
             onClick={onClick}
         >
             <div className="w-12 h-12">
