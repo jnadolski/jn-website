@@ -16,5 +16,8 @@ export default defineConfig({
     react(), // react() comes after svgr
     tailwindcss(), // Keep this plugin
   ],
+  build: {
+    outDir: 'build',
+  },
   // Remove the css.postcss section entirely
 });
