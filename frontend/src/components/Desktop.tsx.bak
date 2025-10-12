@@ -1,0 +1,72 @@
+import React from 'react';
+import Taskbar from './Taskbar';
+import Window from './Window';
+import { useWindowManager } from '../hooks/useWindowManager';
+import DesktopIcon from './DesktopIcon';
+import AboutWindow from './AboutWindow';
+import ProjectsWindow from './ProjectsWindow';
+import ContactWindow from './ContactWindow';
+import JenAIWindow from './JenAIWindow';
+import ResumeWindow from './ResumeWindow';
+
+// Correctly import SVGs as React components using Vite's `svgr` plugin
+import AboutIcon from '../assets/info.svg?react';
+import ProjectsIcon from '../assets/briefcase.svg?react';
+import ContactIcon from '../assets/contact.svg?react';
+import JenAIIcon from '../assets/message.svg?react';
+import ResumeIcon from '../assets/file.svg?react';
+
+const Desktop: React.FC = () => {
+    const { windows, activeWindowId, openWindow, closeWindow, bringToFront, updateWindowPosition } = useWindowManager();
+
+    const renderWindowContent = (id: string) => {
+        const windowId = id.split('-')[0];
+        switch (windowId) {
+            case 'about':
+                return <AboutWindow />;
+            case 'projects':
+                return <ProjectsWindow />;
+            case 'contact':
+                return <ContactWindow />;
+            case 'jenai':
+                return <JenAIWindow />;
+            case 'resume':
+                return <ResumeWindow />;
+            default:
+                return <p>This is the content of {id}</p>;
+        }
+    };
+
+    return (
+        <div id="desktop" className="w-screen h-screen relative overflow-hidden font-mono bg-[#008080] text-[#222] select-none">
+            <div className="p-4 space-y-4">
+                <DesktopIcon label="About Me" icon={<AboutIcon />} onClick={() => openWindow('about', 'About Me')} />
+                <DesktopIcon label="Projects" icon={<ProjectsIcon />} onClick={() => openWindow('projects', 'Projects')} />
+                <DesktopIcon label="Contact" icon={<ContactIcon />} onClick={() => openWindow('contact', 'Contact')} />
+                <DesktopIcon label="JenAI" icon={<JenAIIcon />} onClick={() => openWindow('jenai', 'JenAI')} />
+                <DesktopIcon label="Resume" icon={<ResumeIcon />} onClick={() => openWindow('resume', 'Resume', { width: 850, height: 600 })} />
+            </div>
+            {
+                windows.map(window => (
+                    <Window
+                        key={window.id}
+                        id={window.id}
+                        title={window.title}
+                        isOpen={window.isOpen}
+                        position={window.position}
+                        size={window.size}
+                        zIndex={window.zIndex}
+                        onClose={() => closeWindow(window.id)}
+                        onFocus={() => bringToFront(window.id)}
+                        onDrag={(position) => updateWindowPosition(window.id, position)}
+                    >
+                        {renderWindowContent(window.id)}
+                    </Window>
+                ))
+            }
+            <Taskbar windows={windows} activeWindowId={activeWindowId} onStartMenuItemClick={(id, title) => openWindow(id, title)} onTaskbarItemClick={bringToFront} />
+        </div>
+    );
+};
+
+export default Desktop;
