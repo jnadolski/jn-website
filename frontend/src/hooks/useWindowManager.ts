@@ -20,8 +20,10 @@ export const useWindowManager = () => {
         setWindows(prevWindows => {
             const existingWindow = prevWindows.find(w => w.id.startsWith(id));
             if (existingWindow) {
-                bringToFront(existingWindow.id);
-                return prevWindows.map(w => w.id.startsWith(id) ? { ...w, isOpen: true } : w);
+                const newZIndex = highestZIndex + 1;
+                setHighestZIndex(newZIndex);
+                setActiveWindowId(existingWindow.id);
+                return prevWindows.map(w => w.id.startsWith(id) ? { ...w, isOpen: true, zIndex: newZIndex } : w);
             }
 
             const newPosition = { x: 150 + windowOffset * 20, y: 50 + windowOffset * 20 };
@@ -47,7 +49,6 @@ export const useWindowManager = () => {
     };
 
     const bringToFront = (id: string) => {
-        setActiveWindowId(id);
         setWindows(prevWindows => {
             const windowToFront = prevWindows.find(w => w.id === id);
             if (!windowToFront || windowToFront.zIndex === highestZIndex) {
