@@ -2,7 +2,7 @@ import React from 'react';
 
 interface DesktopIconProps {
     label: string;
-    icon: React.ReactElement;
+    icon: React.ReactElement<React.SVGProps<SVGSVGElement>>;
     onClick: () => void;
 }
 

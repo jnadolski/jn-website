@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 interface WindowProps {
-    id: string;
     title: string;
     children: React.ReactNode;
     isOpen: boolean;
@@ -13,7 +12,7 @@ interface WindowProps {
     onDrag: (position: { x: number; y: number }) => void;
 }
 
-const Window: React.FC<WindowProps> = ({ id, title, children, isOpen, position, size, zIndex, onClose, onFocus, onDrag }) => {
+const Window: React.FC<WindowProps> = ({ title, children, isOpen, position, size, zIndex, onClose, onFocus, onDrag }) => {
     const [isDragging, setIsDragging] = useState(false);
     const windowRef = useRef<HTMLDivElement>(null);
     const dragStartPos = useRef({ x: 0, y: 0 });
