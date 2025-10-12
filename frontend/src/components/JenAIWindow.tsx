@@ -7,6 +7,7 @@ interface Message {
 }
 
 const JenAIWindow: React.FC = () => {
+    const VITE_API_URL = import.meta.env.VITE_API_URL;
     const [messages, setMessages] = useState<Message[]>([
         { text: "Greetings! I am JenAI. Ask me anything about Jennifer's portfolio. How can I assist you today?", isUser: false },
     ]);
