@@ -21,6 +21,7 @@ const JenAIWindow: React.FC = () => {
         setInput('');
 
         try {
+            console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/ai/chat`, {
                 method: 'POST',
                 headers: {
