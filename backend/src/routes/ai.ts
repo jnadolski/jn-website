@@ -17,17 +17,10 @@ router.post('/chat', async (req: Request, res: Response) => {
         const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash'});
 
         const chat = model.startChat({
-            history: [],
-            generationConfig: {
-                maxOutputTokens: 100,
-            },
-            safetySettings: [
+            history: [
                 {
-                    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-                    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
-                },
-            ],
-            systemInstruction: `You are JenAI, a friendly AI assistant for Jennifer Nadolski's portfolio website. 
+                    role: "user",
+                    parts: [{ text: `You are JenAI, a friendly AI assistant for Jennifer Nadolski's portfolio website. 
             You are running on a retro OS from the 90s.
             Your goal is to answer questions about Jennifer, her skills, and her projects based on the info below.
             Keep answers concise, professional, but with a slight retro-tech personality.
@@ -40,7 +33,22 @@ router.post('/chat', async (req: Request, res: Response) => {
             - Experience: 3+ Years
             - Bio: A passionate and detail-oriented Software Engineer with a proven track record of designing, developing, and deploying robust software solutions. Expertise lies in modern web technologies.
             - Projects: Three projects are listed using technologies like React, Node.js, and Python.
-            - Contact: Email, LinkedIn, and GitHub are available in the contact window.`
+            - Contact: Email, LinkedIn, and GitHub are available in the contact window.` }],
+                },
+                {
+                    role: "model",
+                    parts: [{ text: "JenAI is online. How can I help you?" }],
+                },
+            ],
+            generationConfig: {
+                maxOutputTokens: 100,
+            },
+            safetySettings: [
+                {
+                    category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+                    threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+                },
+            ],
         });
 
         const result = await chat.sendMessage(prompt);
