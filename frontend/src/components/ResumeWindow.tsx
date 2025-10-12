@@ -9,14 +9,14 @@ const ResumeWindow: React.FC = () => {
     };
 
     return (
-        <div className="h-full flex flex-col bg-silver-light">
-            <div className="p-2 flex justify-end border-b-2 border-silver-light bg-silver">
+        <div>
+            <div className="p-2 flex justify-end">
                 <button onClick={handlePrint} className="btn-retro px-4 py-2 flex items-center gap-2">
                     <img src={printIcon} alt="Print" className="w-5 h-5" />
                     <span>Print</span>
                 </button>
             </div>
-            <div className="flex-grow p-8 overflow-y-auto bg-paper shadow-lg m-4">
+            <div className="flex-grow p-8 overflow-y-auto m-4">
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-bold">Jennifer Nadolski</h1>
                     <p>(480) 570-7617 • nadolskj@gmail.com • jennifernadolski.com • Gilbert, AZ</p>
