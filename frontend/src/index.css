@@ -2,16 +2,13 @@
 
 @import 'tailwindcss';
 
-@theme {
-    --color-teal: #008080; /* Teal color 008080 */
-    --color-silver: #c0c0c0; /* Silver color c0c0c0 */
-    --color-silver-light: #e0e0e0; /* Silver light color e0e0e0 */
-    --color-navy: #000080; /* Navy color 000080 */ 
-    --color-charcoal: #222222; /* Charcoal color 222222 */ 
-    --color-paper: #fefefe; /* Paper color fefefe */ 
-}
-
 :root {
+  --color-teal: #008080;
+  --color-silver: #c0c0c0;
+  --color-silver-light: #e0e0e0;
+  --color-navy: #000080;
+  --color-charcoal: #222222;
+  --color-paper: #fefefe;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

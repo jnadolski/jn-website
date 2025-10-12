@@ -2,9 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" id="favicon" type="image/svg+xml" href="" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jennifer Nadolski OS</title>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const favicon = document.getElementById('favicon');
+        const bodyStyles = getComputedStyle(document.body);
+        const charcoalColor = bodyStyles.getPropertyValue('--color-charcoal').trim() || '#222222';
+        const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 24 24"><path fill="${charcoalColor}" d="M8 5h2v2H8V5zM6 7h2v2H6V7zM4 9h2v2H4V9zm-2 2h2v2H2v-2zm2 2h2v2H4v-2zm2 2h2v2H6v-2zm2 2h2v2H8v-2zm8-12h-2v2h2V5zm2 2h-2v2h2V7zm2 2h-2v2h2V9zm2 2h-2v2h2v-2zm-2 2h-2v2h2v-2zm-2 2h-2v2h2v-2zm-2 2h-2v2h2v-2z"/></svg>`;
+        const dataUri = `data:image/svg+xml;base64,${btoa(svgString)}`;
+        favicon.href = dataUri;
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>
