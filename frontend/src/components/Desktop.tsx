@@ -10,9 +10,9 @@ import JenAIWindow from './JenAIWindow';
 import ResumeWindow from './ResumeWindow';
 
 // Correctly import SVGs as React components using Vite's `svgr` plugin
-import AboutIcon from '../assets/info.svg?react';
-import ProjectsIcon from '../assets/briefcase.svg?react';
-import ContactIcon from '../assets/contact.svg?react';
+import AboutIcon from '../assets/contact.svg?react';
+import ProjectsIcon from '../assets/folder.svg?react';
+import ContactIcon from '../assets/mail.svg?react';
 import JenAIIcon from '../assets/message.svg?react';
 import ResumeIcon from '../assets/file.svg?react';
 
@@ -42,9 +42,9 @@ const Desktop: React.FC = () => {
             <div className="p-4 space-y-4">
                 <DesktopIcon label="About Me" icon={<AboutIcon />} onClick={() => openWindow('about', 'About Me')} />
                 <DesktopIcon label="Projects" icon={<ProjectsIcon />} onClick={() => openWindow('projects', 'Projects')} />
-                <DesktopIcon label="Contact" icon={<ContactIcon />} onClick={() => openWindow('contact', 'Contact')} />
                 <DesktopIcon label="JenAI" icon={<JenAIIcon />} onClick={() => openWindow('jenai', 'JenAI')} />
                 <DesktopIcon label="Resume" icon={<ResumeIcon />} onClick={() => openWindow('resume', 'Resume', { width: 850, height: 600 })} />
+                <DesktopIcon label="Contact" icon={<ContactIcon />} onClick={() => openWindow('contact', 'Contact')} />
             </div>
             {
                 windows.map(window => (

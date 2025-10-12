@@ -12,7 +12,7 @@ const TaskbarItem: React.FC<TaskbarItemProps> = ({ title, isActive, onClick }) =
         : 'btn-retro';
 
     return (
-        <button className={`taskbar-item px-3 py-1 min-w-[150px] ${activeClass}`} onClick={onClick}>
+        <button className={`taskbar-item px-3 py-1 text-left min-w-[150px] ${activeClass}`} onClick={onClick}>
             {title}
         </button>
     );
