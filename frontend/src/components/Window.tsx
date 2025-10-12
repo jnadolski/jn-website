@@ -62,6 +62,7 @@ const Window: React.FC<WindowProps> = ({ id, title, children, isOpen, position, 
 
     return (
         <div
+            id={id}
             ref={windowRef}
             className="window min-w-[300px] min-h-[200px] absolute border-2 border-white shadow-md bg-silver flex flex-col resize overflow-auto"
             style={{ top: `${position.y}px`, left: `${position.x}px`, zIndex, width: `${size.width}px`, height: `${size.height}px` }}
