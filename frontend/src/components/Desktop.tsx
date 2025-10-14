@@ -40,7 +40,7 @@ const Desktop: React.FC = () => {
     return (
         <div id="desktop" className="w-screen h-screen relative overflow-hidden font-mono bg-teal text-charcoal select-none">
             <div className="p-4 space-y-4">
-                <DesktopIcon label="About Me" icon={<AboutIcon />} onClick={() => openWindow('about', 'About Me')} />
+                <DesktopIcon label="About_Me" icon={<AboutIcon />} onClick={() => openWindow('about', 'About_Me')} />
                 <DesktopIcon label="Projects" icon={<ProjectsIcon />} onClick={() => openWindow('projects', 'Projects')} />
                 <DesktopIcon label="JenAI" icon={<JenAIIcon />} onClick={() => openWindow('jenai', 'JenAI')} />
                 <DesktopIcon label="Resume" icon={<ResumeIcon />} onClick={() => openWindow('resume', 'Resume', { width: 850, height: 600 })} />

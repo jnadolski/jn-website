@@ -20,7 +20,44 @@
 
 body {
     font-family: 'VT323', monospace;
+    /* cursor: url('./assets/cursor_arrow.png') 0 0, auto; */
 }
+
+/* a:hover,
+button:hover,
+input[type="submit"]:hover,
+.desktop-icon:hover,
+.start-menu-item:hover {
+    cursor: url('./assets/cursor_hand.png') 0 0 16 16;
+}
+
+body:active,
+a:active,
+button:active,
+input[type="submit"]:active {
+    cursor: url('./assets/cursor_hand.png') 0 0, auto;
+}
+
+.title-bar {
+    cursor: url('./assets/cursor_move.png') 0 0, auto; /* Default for draggable 
+}
+
+.title-bar:active {
+    cursor: url('./assets/cursor_drag.png') 0 0, auto; /* When actively dragging 
+}
+
+input[type="text"],
+textarea {
+    cursor: url('./assets/cursor_typing.png') 0 0, text;
+} 
+*/
+
+/* Add rules for cursor_resize.png if you have resize handles */
+/* Example:
+.resize-handle {
+    cursor: url('./assets/cursor_resize.png') 0 0, nwse-resize;
+}
+*/
 
 .btn-retro {
     background-color: var(--color-silver); 
